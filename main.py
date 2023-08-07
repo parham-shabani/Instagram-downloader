@@ -19,7 +19,7 @@ async def insta_scrape(link) -> dict:
 
   headers = {
     "X-RapidAPI-Key":
-    "4112085f83msh4cc3fc8b35435ccp152bafjsn095e429b2119",
+    "4f9eef7b62mshc232b27bba34a7ep1a12efjsn26541b47f4d8",
     "X-RapidAPI-Host":
     "instagram-downloader-download-instagram-videos-stories.p.rapidapi.com"
   }
@@ -75,17 +75,39 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     #get instagram post contents
     result = await insta_scrape(text)
+    post_caption = ""
 
-    post_caption = result["title"]
-    media = result["media"]
-    save_path = 'media.mp4'
+  if "story_by_id" in result:
+    if result["story_by_id"]["Type"] == 'Story-Image':
+      media = result["story_by_id"]["media"]
+      save_path = 'media.jpg'
 
-    bot_token = "6635906742:AAE30y2pQOVWP6p0SRAj-KOjNDutAJ-b8ME"
-    chat_id = "@chaagh"
+    if result["story_by_id"]["Type"] == 'Story-Video':
+      media = result["story_by_id"]["media"]
+      save_path = 'media.mp4'
 
-    #convert to telegram post
+  else:
+    media = None
+    if result["Type"] == 1 and result["Type"] == 'Post-Image':
+      post_caption = result["title"]
+      media = result["media"]
+      save_path = 'media.jpg'
+
+    elif result["Type"] == 'Post-Video':
+      post_caption = result["title"]
+      media = result["media"]
+      save_path = 'media.mp4'
+
+  bot_token = "6635906742:AAE30y2pQOVWP6p0SRAj-KOjNDutAJ-b8ME"
+  chat_id = "@chaagh"
+
+  if media is not None:
+    # Download and send the media
     await download_media(media, save_path)
-    await send_media(bot_token, chat_id, save_path, caption=post_caption)
+    await send_media(bot_token,
+                     chat_id,
+                     save_path,
+                     caption=post_caption + "\n@Chaagh")
 
 
 if __name__ == '__main__':
