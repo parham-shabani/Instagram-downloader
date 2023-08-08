@@ -7,7 +7,7 @@ from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import requests
 
-bot = Bot(token="6635906742:AAE30y2pQOVWP6p0SRAj-KOjNDutAJ-b8ME")
+bot = Bot(token="")
 BOT_USERNAME: Final = '@instagram_up_down_bot'
 
 
@@ -19,7 +19,7 @@ async def insta_scrape(link) -> dict:
 
   headers = {
     "X-RapidAPI-Key":
-    "4f9eef7b62mshc232b27bba34a7ep1a12efjsn26541b47f4d8",
+    "",
     "X-RapidAPI-Host":
     "instagram-downloader-download-instagram-videos-stories.p.rapidapi.com"
   }
@@ -98,7 +98,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
       media = result["media"]
       save_path = 'media.mp4'
 
-  bot_token = "6635906742:AAE30y2pQOVWP6p0SRAj-KOjNDutAJ-b8ME"
+  bot_token = ""
   chat_id = "@chaagh"
 
   if media is not None:
